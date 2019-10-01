@@ -1,4 +1,4 @@
-package edu.cnm.deepdive.blackjack.model;
+package edu.cnm.deepdive.blackjack.model.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
