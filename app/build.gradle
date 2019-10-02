@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.1"
     defaultConfig {
         applicationId "edu.cnm.deepdive.blackjack"
         minSdkVersion 21
@@ -11,7 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
-            annotationProcessorOptions{
+            annotationProcessorOptions {
                 arguments = ["room.schemaLocation" : "$projectDir/schemas".toString()]
             }
         }
@@ -38,13 +38,11 @@ dependencies {
 
     def room_version = "2.1.0"
     implementation "androidx.room:room-runtime:$room_version"
-
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     implementation 'com.facebook.stetho:stetho:1.5.1'
 
     testImplementation 'junit:junit:4.12'
-
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

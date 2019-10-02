@@ -1,6 +1,5 @@
 package edu.cnm.deepdive.blackjack.model.entity;
 
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -12,10 +11,10 @@ import java.util.Date;
     foreignKeys = {
         @ForeignKey(
             entity = Round.class,
-            parentColumns = {"round_id"},
-            childColumns = {"round_id"},
+            childColumns = "round_id",
+            parentColumns = "round_id",
             onDelete = ForeignKey.CASCADE
-       )
+        )
     }
 )
 public class Hand {
@@ -23,16 +22,18 @@ public class Hand {
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "hand_id")
   private long id;
+
   @NonNull
   @ColumnInfo(index = true)
   private Date created = new Date();
+
   @NonNull
   @ColumnInfo(index = true)
   private Date updated = new Date();
 
   private boolean dealer;
 
-  @ColumnInfo(name ="round_id",index = true)
+  @ColumnInfo(name = "round_id", index = true)
   private long roundId;
 
   private int wager;
@@ -46,6 +47,15 @@ public class Hand {
 
   public void setId(long id) {
     this.id = id;
+  }
+
+  @NonNull
+  public Date getCreated() {
+    return created;
+  }
+
+  public void setCreated(@NonNull Date created) {
+    this.created = created;
   }
 
   @NonNull
@@ -89,17 +99,8 @@ public class Hand {
     this.outcome = outcome;
   }
 
-  @NonNull
-  public Date getCreated() {
-    return created;
-  }
-
-  public void setCreated(@NonNull Date created) {
-    this.created = created;
-  }
-
-  public enum Outcome{
-    WIN,LOSS,PUSH
+  public enum Outcome {
+    WIN, LOSS, PUSH;
   }
 
 }

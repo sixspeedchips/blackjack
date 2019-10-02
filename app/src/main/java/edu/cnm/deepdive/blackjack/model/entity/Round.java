@@ -1,6 +1,5 @@
 package edu.cnm.deepdive.blackjack.model.entity;
 
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -25,9 +24,9 @@ public class Round {
   private long id;
 
   @NonNull
-  private Date create = new Date();
+  private Date created = new Date();
 
-  @ColumnInfo(name = "shoe_id",index = true)
+  @ColumnInfo(name = "shoe_id", index = true)
   private long shoeId;
 
   public long getId() {
@@ -39,12 +38,12 @@ public class Round {
   }
 
   @NonNull
-  public Date getCreate() {
-    return create;
+  public Date getCreated() {
+    return created;
   }
 
-  public void setCreate(@NonNull Date create) {
-    this.create = create;
+  public void setCreated(@NonNull Date created) {
+    this.created = created;
   }
 
   public long getShoeId() {
@@ -54,4 +53,5 @@ public class Round {
   public void setShoeId(long shoeId) {
     this.shoeId = shoeId;
   }
+
 }

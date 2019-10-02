@@ -3,16 +3,19 @@ package edu.cnm.deepdive.blackjack.model.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import java.util.Date;
 
 @Entity(
     foreignKeys = {
-      @ForeignKey(
-          entity = Card.class,
-          childColumns = {"marker_id"},
-          parentColumns = {"card_id"})
+        @ForeignKey(
+            entity = Card.class,
+            childColumns = "marker_id",
+            parentColumns = "card_id",
+            onDelete = ForeignKey.NO_ACTION
+        )
     }
 )
 public class Shoe {
@@ -23,9 +26,9 @@ public class Shoe {
 
   @ColumnInfo(index = true)
   @NonNull
-  private Date create = new Date();
+  private Date created = new Date();
 
-  @ColumnInfo(name = "marker_id",index = true)
+  @ColumnInfo(name = "marker_id", index = true)
   private Long markerId;
 
   public long getId() {
@@ -37,12 +40,12 @@ public class Shoe {
   }
 
   @NonNull
-  public Date getCreate() {
-    return create;
+  public Date getCreated() {
+    return created;
   }
 
-  public void setCreate(@NonNull Date create) {
-    this.create = create;
+  public void setCreated(@NonNull Date created) {
+    this.created = created;
   }
 
   public Long getMarkerId() {
@@ -52,4 +55,5 @@ public class Shoe {
   public void setMarkerId(Long markerId) {
     this.markerId = markerId;
   }
+
 }

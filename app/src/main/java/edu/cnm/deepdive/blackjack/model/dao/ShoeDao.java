@@ -17,21 +17,21 @@ public interface ShoeDao {
   long insert(Shoe shoe);
 
   @Insert
-  long[] insert(Shoe...shoes);
+  long[] insert(Shoe... shoes);
 
   @Insert
   List<Long> insert(Collection<Shoe> shoes);
 
-  @Query("SELECT * FROM shoe ORDER BY shoe_id ASC")
+  @Query("SELECT * FROM Shoe ORDER BY shoe_id ASC")
   LiveData<List<Shoe>> getAll();
 
-  @Query("SELECT * FROM shoe WHERE shoe_id = :shoeId")
+  @Query("SELECT * FROM Shoe WHERE shoe_id = :shoeId")
   LiveData<Shoe> getById(long shoeId);
 
   @Update
-  int update(Shoe...shoes);
+  int update(Shoe... shoes);
 
   @Delete
-  int delete(Shoe...shoes);
+  int delete(Shoe... shoes);
 
 }
