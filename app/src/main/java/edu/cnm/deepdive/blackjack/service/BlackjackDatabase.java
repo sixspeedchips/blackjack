@@ -25,6 +25,8 @@ import java.util.Date;
 public abstract class BlackjackDatabase extends RoomDatabase {
 
 
+  protected BlackjackDatabase(){}
+
   private static Application applicationContext;
 
   public static void setApplicationContext(Application applicationContext) {

@@ -26,33 +26,27 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
 
     Button addDeck = findViewById(R.id.add_deck);
-    addDeck.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        new Thread(new Runnable() {
-          @Override
-          public void run() {
-            BlackjackDatabase db = BlackjackDatabase.getInstance();
-            Shoe shoe = new Shoe();
+    addDeck.setOnClickListener((view)-> new Thread(this::createDeck).start());
+  }
 
-            long shoeId = db.getShoeDao().insert(shoe);
-            List<Card> cards = new ArrayList<>();
-            for (int i = 0; i < 6; i++) {
-              for (Rank rank : Rank.values()) {
-                for (Suit suit : Suit.values()) {
-                  Card card = new Card();
-                  card.setShoeId(shoeId);
-                  card.setRank(rank);
-                  card.setSuit(suit);
-                  cards.add(card);
-                }
-              }
-            }
-            Collections.shuffle(cards);
-            db.getCardDao().insert(cards);
-          }
-        }).start();
+  private void createDeck() {
+    BlackjackDatabase db = BlackjackDatabase.getInstance();
+    Shoe shoe = new Shoe();
+
+    long shoeId = db.getShoeDao().insert(shoe);
+    List<Card> cards = new ArrayList<>();
+    for (int i = 0; i < 6; i++) {
+      for (Rank rank : Rank.values()) {
+        for (Suit suit : Suit.values()) {
+          Card card = new Card();
+          card.setShoeId(shoeId);
+          card.setRank(rank);
+          card.setSuit(suit);
+          cards.add(card);
+        }
       }
-    });
+    }
+    Collections.shuffle(cards);
+    db.getCardDao().insert(cards);
   }
 }
