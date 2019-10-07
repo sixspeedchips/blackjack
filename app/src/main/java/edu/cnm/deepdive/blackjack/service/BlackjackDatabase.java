@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 import edu.cnm.deepdive.blackjack.model.dao.CardDao;
+import edu.cnm.deepdive.blackjack.model.dao.HandDao;
 import edu.cnm.deepdive.blackjack.model.dao.ShoeDao;
 import edu.cnm.deepdive.blackjack.model.entity.Card;
 import edu.cnm.deepdive.blackjack.model.entity.Card.Rank;
@@ -16,6 +17,7 @@ import edu.cnm.deepdive.blackjack.model.entity.Hand;
 import edu.cnm.deepdive.blackjack.model.entity.Hand.Outcome;
 import edu.cnm.deepdive.blackjack.model.entity.Round;
 import edu.cnm.deepdive.blackjack.model.entity.Shoe;
+import java.net.PortUnreachableException;
 import java.util.Date;
 
 @Database(entities = {
@@ -25,7 +27,8 @@ import java.util.Date;
 public abstract class BlackjackDatabase extends RoomDatabase {
 
 
-  protected BlackjackDatabase(){}
+  protected BlackjackDatabase() {
+  }
 
   private static Application applicationContext;
 
@@ -34,7 +37,10 @@ public abstract class BlackjackDatabase extends RoomDatabase {
   }
 
   public abstract ShoeDao getShoeDao();
+
   public abstract CardDao getCardDao();
+
+  public abstract HandDao getHandDao();
 
   public static BlackjackDatabase getInstance() {
     return InstanceHolder.INSTANCE;
