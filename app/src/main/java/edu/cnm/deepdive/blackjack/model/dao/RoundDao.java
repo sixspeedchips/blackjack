@@ -5,8 +5,11 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import edu.cnm.deepdive.blackjack.model.entity.Round;
+import edu.cnm.deepdive.blackjack.model.pojo.RoundWithDetails;
 import java.util.List;
+import java.util.OptionalLong;
 
 @Dao
 public interface RoundDao {
@@ -25,6 +28,9 @@ public interface RoundDao {
   @Query("SELECT * FROM round WHERE round_id=:roundId")
   LiveData<Round> getSingleRound(long roundId);
 
+  @Transaction
+  @Query("SELECT * FROM round WHERE round_id = :roundId")
+  LiveData<RoundWithDetails> getRoundWithDetails(long roundId);
 
 
 

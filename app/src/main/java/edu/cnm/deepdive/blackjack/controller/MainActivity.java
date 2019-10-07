@@ -1,22 +1,18 @@
 package edu.cnm.deepdive.blackjack.controller;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView.BufferType;
+import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.room.ColumnInfo;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
 import edu.cnm.deepdive.blackjack.R;
 import edu.cnm.deepdive.blackjack.model.entity.Card;
-import edu.cnm.deepdive.blackjack.model.entity.Card.Rank;
-import edu.cnm.deepdive.blackjack.model.entity.Card.Suit;
-import edu.cnm.deepdive.blackjack.model.entity.Shoe;
-import edu.cnm.deepdive.blackjack.service.BlackjackDatabase;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import edu.cnm.deepdive.blackjack.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,28 +21,32 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    Button addDeck = findViewById(R.id.add_deck);
-    addDeck.setOnClickListener((view)-> new Thread(this::createDeck).start());
+    Button addDeck = findViewById(R.id.start_round);
+
+    MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+    viewModel.getRound().observe(this, (round) -> {
+      Log.d("", round.getHands().get(0).getCards().toString());
+    });
+
+    addDeck.setOnClickListener((view) -> {
+      viewModel.startRound();
+    });
+
+    setupFragments();
+
   }
 
-  private void createDeck() {
-    BlackjackDatabase db = BlackjackDatabase.getInstance();
-    Shoe shoe = new Shoe();
 
-    long shoeId = db.getShoeDao().insert(shoe);
-    List<Card> cards = new ArrayList<>();
-    for (int i = 0; i < 6; i++) {
-      for (Rank rank : Rank.values()) {
-        for (Suit suit : Suit.values()) {
-          Card card = new Card();
-          card.setShoeId(shoeId);
-          card.setRank(rank);
-          card.setSuit(suit);
-          cards.add(card);
-        }
-      }
-    }
-    Collections.shuffle(cards);
-    db.getCardDao().insert(cards);
+  private void setupFragments() {
+    Fragment dealerFragment = new DealerHandFragment();
+    Fragment playerFragment = new PlayerHandFragment();
+
+    FragmentManager manager = getSupportFragmentManager();
+
+    manager.beginTransaction().replace(R.id.dealer_hand, dealerFragment)
+        .replace(R.id.player_hand, playerFragment).commit();
   }
+
+
 }

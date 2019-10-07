@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "06f59561a86b057fd06719aa07ddf3f0",
+    "identityHash": "447777da472ad33a4865ac7d060560ec",
     "entities": [
       {
         "tableName": "Card",
@@ -248,6 +248,14 @@
         },
         "indices": [
           {
+            "name": "index_Round_created",
+            "unique": false,
+            "columnNames": [
+              "created"
+            ],
+            "createSql": "CREATE  INDEX `index_Round_created` ON `${TABLE_NAME}` (`created`)"
+          },
+          {
             "name": "index_Round_shoe_id",
             "unique": false,
             "columnNames": [
@@ -335,7 +343,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '06f59561a86b057fd06719aa07ddf3f0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '447777da472ad33a4865ac7d060560ec')"
     ]
   }
 }

@@ -9,6 +9,7 @@ import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 import edu.cnm.deepdive.blackjack.model.dao.CardDao;
 import edu.cnm.deepdive.blackjack.model.dao.HandDao;
+import edu.cnm.deepdive.blackjack.model.dao.RoundDao;
 import edu.cnm.deepdive.blackjack.model.dao.ShoeDao;
 import edu.cnm.deepdive.blackjack.model.entity.Card;
 import edu.cnm.deepdive.blackjack.model.entity.Card.Rank;
@@ -45,6 +46,8 @@ public abstract class BlackjackDatabase extends RoomDatabase {
   public static BlackjackDatabase getInstance() {
     return InstanceHolder.INSTANCE;
   }
+
+  public abstract RoundDao getRoundDao();
 
   private static class InstanceHolder {
 

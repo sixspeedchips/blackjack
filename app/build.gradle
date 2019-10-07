@@ -12,7 +12,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation" : "$projectDir/schemas".toString()]
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
     }
@@ -42,6 +42,7 @@ dependencies {
 
     def room_version = "2.1.0"
     implementation "androidx.room:room-runtime:$room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     implementation 'com.facebook.stetho:stetho:1.5.1'
