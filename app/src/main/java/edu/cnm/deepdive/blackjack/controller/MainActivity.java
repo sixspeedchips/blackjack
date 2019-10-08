@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment dealerFragment = new DealerHandFragment();
     Fragment playerFragment = new PlayerHandFragment();
 
+
     FragmentManager manager = getSupportFragmentManager();
 
     manager.beginTransaction().replace(R.id.dealer_hand, dealerFragment)
