@@ -10,11 +10,27 @@
   <include layout="@layout/list_cards"/>
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/hit_me"
+    android:id="@+id/stay"
+    android:backgroundTint="@android:color/holo_red_light"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:src="@drawable/ic_block"
+    android:layout_margin="@dimen/fab_margin"
+    app:layout_constraintEnd_toStartOf="@id/hit_me"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:rippleColor="#f00"
+
+    />
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/hit_me"
+    android:layout_width="wrap_content"
+    android:backgroundTint="@android:color/holo_green_light"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fab_margin"
+    android:background="#0f0"
+
     android:src="@drawable/ic_add"
+    app:rippleColor="#0f0"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     />

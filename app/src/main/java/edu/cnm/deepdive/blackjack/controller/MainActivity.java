@@ -33,21 +33,6 @@ public class MainActivity extends AppCompatActivity {
       viewModel.startRound();
     });
 
-    setupFragments();
-
   }
-
-
-  private void setupFragments() {
-    Fragment dealerFragment = new DealerHandFragment();
-    Fragment playerFragment = new PlayerHandFragment();
-
-
-    FragmentManager manager = getSupportFragmentManager();
-
-    manager.beginTransaction().replace(R.id.dealer_hand, dealerFragment)
-        .replace(R.id.player_hand, playerFragment).commit();
-  }
-
 
 }

@@ -8,7 +8,8 @@
   tools:context=".controller.MainActivity">
 
 
-  <FrameLayout
+  <fragment
+    android:name="edu.cnm.deepdive.blackjack.controller.DealerHandFragment"
     android:id="@+id/dealer_hand"
     android:layout_width="0dp"
     android:layout_height="0dp"
@@ -17,7 +18,9 @@
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintBottom_toTopOf="@id/player_hand"
     />
-  <FrameLayout
+
+  <fragment
+    android:name="edu.cnm.deepdive.blackjack.controller.PlayerHandFragment"
     android:id="@+id/player_hand"
     android:layout_width="0dp"
     android:layout_height="0dp"

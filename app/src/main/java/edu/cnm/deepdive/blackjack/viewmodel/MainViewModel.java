@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import edu.cnm.deepdive.blackjack.model.dao.CardDao;
 import edu.cnm.deepdive.blackjack.model.entity.Card;
 import edu.cnm.deepdive.blackjack.model.entity.Card.Rank;
 import edu.cnm.deepdive.blackjack.model.entity.Card.Suit;
@@ -123,4 +124,25 @@ public class MainViewModel extends AndroidViewModel {
   public LiveData<HandWithCards> getPlayerHand() {
     return playerHand;
   }
+
+  public void hitPlayer(){
+
+    new Thread(()->{
+
+      CardDao dao = db.getCardDao();
+      long handIdValue = playerHandId.getValue();
+      Card card = dao.getTopCardInShoe(shoeId);
+      card.setShoeId(null);
+      card.setHandId(handIdValue);
+      dao.update(card);
+      playerHandId.postValue(handIdValue);
+    }).start();
+
+  }
+
+  public void hitDealer(){
+
+
+  }
+
 }
