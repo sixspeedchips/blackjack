@@ -4,6 +4,7 @@ package edu.cnm.deepdive.blackjack.controller;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import edu.cnm.deepdive.blackjack.R;
 import edu.cnm.deepdive.blackjack.model.entity.Card;
 import edu.cnm.deepdive.blackjack.model.pojo.HandWithCards;
 import edu.cnm.deepdive.blackjack.viewmodel.MainViewModel;
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,13 +28,23 @@ public abstract class HandFragment extends Fragment {
 
   private ArrayAdapter<Card> adapter;
   private MainViewModel viewModel;
+  private TextView hardValue;
+  private TextView softValue;
+  private TextView bustedValue;
+  private TextView blackjackValue;
+
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
     View view = inflater.inflate(getLayout(), container, false);
     ListView cards = view.findViewById(R.id.cards);
-    adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1);
+    adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
     cards.setAdapter(adapter);
+    hardValue = view.findViewById(R.id.hard_value);
+    softValue = view.findViewById(R.id.soft_value);
+    bustedValue = view.findViewById(R.id.busted_value);
+    blackjackValue = view.findViewById(R.id.blackjack_value);
 
     return view;
   }
@@ -45,13 +57,37 @@ public abstract class HandFragment extends Fragment {
     handToObserve(viewModel).observe(this, (handWithCards) -> {
       adapter.clear();
       adapter.addAll(handWithCards.getCards());
+      int hard = handWithCards.getHardValue();
+      int soft = handWithCards.getSoftValue();
+
+      int numberCards = handWithCards.getCards().size();
+      bustedValue.setVisibility(View.GONE);
+      hardValue.setVisibility(View.GONE);
+      softValue.setVisibility(View.GONE);
+      blackjackValue.setVisibility(View.GONE);
+
+      if (hard > 21) {
+        bustedValue.setText(String.valueOf(hard));
+        bustedValue.setVisibility(View.VISIBLE);
+      }
+      else if (soft == 21 && numberCards == 2) {
+        blackjackValue.setVisibility(View.VISIBLE);
+      } else {
+        hardValue.setText(String.valueOf(hard));
+        hardValue.setVisibility(View.VISIBLE);
+        if(soft > hard){
+          softValue.setText("|".concat(String.valueOf(soft)));
+          softValue.setVisibility(View.VISIBLE);
+        }
+      }
+
+
     });
   }
 
   public abstract LiveData<HandWithCards> handToObserve(MainViewModel viewModel);
 
   public abstract int getLayout();
-
 
   protected MainViewModel getViewModel() {
     return viewModel;

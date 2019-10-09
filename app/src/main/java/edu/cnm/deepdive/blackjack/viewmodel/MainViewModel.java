@@ -28,7 +28,11 @@ public class MainViewModel extends AndroidViewModel {
 
   private final BlackjackDatabase db;
   private long shoeId;
+  private long markerId;
+  private boolean shuffleNeeded;
+
   private Random rng;
+
 
   private MutableLiveData<Long> roundId;
   private LiveData<RoundWithDetails> round;
@@ -36,8 +40,6 @@ public class MainViewModel extends AndroidViewModel {
   private MutableLiveData<Long> playerHandId;
   private LiveData<HandWithCards> dealerHand;
   private LiveData<HandWithCards> playerHand;
-
-
 
 
   public MainViewModel(@NonNull Application application) {
@@ -49,8 +51,10 @@ public class MainViewModel extends AndroidViewModel {
         (id) -> db.getRoundDao().getRoundWithDetails(id));
     dealerHandId = new MutableLiveData<>();
     playerHandId = new MutableLiveData<>();
-    dealerHand = Transformations.switchMap(dealerHandId, (id)->db.getHandDao().getHandWithCards(id));
-    playerHand = Transformations.switchMap(playerHandId, (id)->db.getHandDao().getHandWithCards(id));
+    dealerHand = Transformations
+        .switchMap(dealerHandId, (id) -> db.getHandDao().getHandWithCards(id));
+    playerHand = Transformations
+        .switchMap(playerHandId, (id) -> db.getHandDao().getHandWithCards(id));
 
 
   }
@@ -80,10 +84,12 @@ public class MainViewModel extends AndroidViewModel {
     int startIndex = cards.size() * 2 / 3;
     int endIndex = cards.size() * 3 / 4;
     int markerIndex = startIndex + rng.nextInt(endIndex - startIndex);
-    Card marker = cards.get(markerIndex);
-    shoe.setMarkerId(marker.getId());
+
+    List<Long> cardsIds = db.getCardDao().insert(cards);
+    markerId = cardsIds.get(markerIndex);
+    shoe.setMarkerId(markerId);
     db.getShoeDao().update(shoe);
-    db.getCardDao().insert(cards);
+    shuffleNeeded = false;
   }
 
   public void startRound() {
@@ -91,7 +97,7 @@ public class MainViewModel extends AndroidViewModel {
     new Thread(() ->
     {
       Round round = new Round();
-      if (shoeId == 0) { //TODO add check if shuffle needed
+      if (shoeId == 0 || shuffleNeeded) {
         createShoe();
       }
       round.setShoeId(shoeId);
@@ -105,10 +111,7 @@ public class MainViewModel extends AndroidViewModel {
       long[] handIds = db.getHandDao().insert(dealer, player);
       for (long handId : handIds) {
         for (int i = 0; i < 2; i++) {
-          Card card = db.getCardDao().getTopCardInShoe(shoeId);
-          card.setShoeId(null);
-          card.setHandId(handId);
-          db.getCardDao().update(card);
+          Card card = getTopCardInShoe(handId);
         }
       }
       this.roundId.postValue(roundId);
@@ -117,32 +120,42 @@ public class MainViewModel extends AndroidViewModel {
     }).start();
   }
 
+  private Card getTopCardInShoe(long handId) {
+
+    CardDao cardDao = db.getCardDao();
+
+    Card card = cardDao.getTopCardInShoe(shoeId);
+    card.setShoeId(null);
+    card.setHandId(handId);
+    cardDao.update(card);
+
+    if(card.getId()==markerId){
+      shuffleNeeded = true;
+    }
+    return card;
+  }
+
+  public void hitPlayer() {
+
+    new Thread(() -> {
+
+      long handIdValue = playerHandId.getValue();
+      Card card = getTopCardInShoe(handIdValue);
+      playerHandId.postValue(handIdValue);
+    }).start();
+
+  }
+
+  public void hitDealer() {
+
+  }
+
   public LiveData<HandWithCards> getDealerHand() {
     return dealerHand;
   }
 
   public LiveData<HandWithCards> getPlayerHand() {
     return playerHand;
-  }
-
-  public void hitPlayer(){
-
-    new Thread(()->{
-
-      CardDao dao = db.getCardDao();
-      long handIdValue = playerHandId.getValue();
-      Card card = dao.getTopCardInShoe(shoeId);
-      card.setShoeId(null);
-      card.setHandId(handIdValue);
-      dao.update(card);
-      playerHandId.postValue(handIdValue);
-    }).start();
-
-  }
-
-  public void hitDealer(){
-
-
   }
 
 }
