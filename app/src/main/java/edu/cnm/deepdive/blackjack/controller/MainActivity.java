@@ -24,15 +24,10 @@ public class MainActivity extends AppCompatActivity {
     Button addDeck = findViewById(R.id.start_round);
 
     MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-
-    viewModel.getRound().observe(this, (round) -> {
-      Log.d("", round.getHands().get(0).getCards().toString());
-    });
-
     addDeck.setOnClickListener((view) -> {
       viewModel.startRound();
     });
-
+    viewModel.startRound();
   }
 
 }

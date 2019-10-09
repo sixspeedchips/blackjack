@@ -17,17 +17,29 @@ import edu.cnm.deepdive.blackjack.viewmodel.MainViewModel;
 public class PlayerHandFragment extends HandFragment {
 
 
+  private FloatingActionButton hitMe;
+  private FloatingActionButton stay;
+  private boolean staying;
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view =  super.onCreateView(inflater, container, savedInstanceState);
 
-    FloatingActionButton hitMe = view.findViewById(R.id.hit_me);
-    hitMe.setOnClickListener((v)->{
-      getViewModel().hitPlayer();
-//      hitMe.hide();
-      Log.d("Hit me clicked","Hit me clicked");
+    hitMe = view.findViewById(R.id.hit_me);
+    stay = view.findViewById(R.id.stay);
 
+    hitMe.setOnClickListener((v)->{
+      if(getHand().getHardValue() < 21) {
+        getViewModel().hitPlayer();
+      }
     });
+    stay.setOnClickListener((v)->{
+      staying = true;
+      hitMe.hide();
+      stay.hide();
+      getViewModel().startDealer();
+    });
+
     return view;
   }
 
@@ -35,8 +47,11 @@ public class PlayerHandFragment extends HandFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-    viewModel.getPlayerHand().observe(this, (handWithCards) -> {});
+    getViewModel().getRound().observe(getActivity(), (round) -> {
+      staying = false;
+    });
+
+
   }
 
 
@@ -48,5 +63,24 @@ public class PlayerHandFragment extends HandFragment {
   @Override
   public int getLayout() {
     return R.layout.fragment_player_hand;
+  }
+
+  @Override
+  protected void updateValues(HandWithCards handWithCards) {
+    super.updateValues(handWithCards);
+    if(handWithCards.getHardValue()<21 && !staying){
+      hitMe.show();
+      stay.show();
+    } else if(handWithCards.getSoftValue() == 21){
+      getViewModel().startDealer();
+      hitMe.hide();
+      stay.hide();
+    }else {
+      hitMe.hide();
+      stay.hide();
+    }
+
+
+
   }
 }

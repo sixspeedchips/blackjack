@@ -146,9 +146,21 @@ public class MainViewModel extends AndroidViewModel {
 
   }
 
-  public void hitDealer() {
-
+  public void startDealer() {
+    new Thread(()->{
+      long handId = dealerHandId.getValue();
+      HandWithCards dealer = dealerHand.getValue();
+      List<Card> cards = dealer.getCards();
+      Card drawnCard;
+      while (dealer.getHardValue() < 17 || dealer.getSoftValue() < 18){
+        drawnCard = getTopCardInShoe(handId);
+        cards.add(drawnCard);
+        dealerHandId.postValue(handId);
+      }
+    }).start();
   }
+
+
 
   public LiveData<HandWithCards> getDealerHand() {
     return dealerHand;
@@ -157,5 +169,6 @@ public class MainViewModel extends AndroidViewModel {
   public LiveData<HandWithCards> getPlayerHand() {
     return playerHand;
   }
+
 
 }
